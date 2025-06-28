@@ -1,7 +1,7 @@
 # robscript
 
-This project provides tools for working with a custom video format. It includes
-conversion utilities and a modular media player for Arch Linux.
+This project provides a single media player for a custom video format. The
+player automatically converts other formats as needed and runs on Arch Linux.
 
 ## Prerequisites
 
@@ -10,29 +10,19 @@ conversion utilities and a modular media player for Arch Linux.
 
 Install these packages using your distribution's package manager.
 
-## Video conversion
+## Building the player
 
-Use the helper script to convert videos to an AV1+Opus Matroska file:
-
-```bash
-./build_video.sh input.mp4 output.rob
-```
-
-## Building the C tools
-
-Inside the `src` directory you will find a converter and two players. Run:
+Inside the `src` directory simply run:
 
 ```bash
 cd src
 make
 ```
 
-This produces three binaries:
+This produces a single binary:
 
-- `robformat` – wraps any video into a `.rob` container
-- `robplay` – minimal SDL2 player for `.rob` files
-- `robplayer` – experimental modular player that can auto-convert files
-  using `robformat`
+- `robplayer` – a modular player that automatically converts videos to the `.rob`
+  format before playback
 
 To play a video with `robplayer`, provide the path on the command line:
 

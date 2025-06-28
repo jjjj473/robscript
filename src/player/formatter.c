@@ -32,10 +32,10 @@ const char *formatter_autoconvert(const char *file) {
     snprintf(converted, sizeof(converted), "%s.rob", file);
 
     char cmd[2048];
-    snprintf(cmd, sizeof(cmd), "./robformat \"%s\" \"%s\"", file, converted);
+    snprintf(cmd, sizeof(cmd), "ffmpeg -y -i \"%s\" -c:v libaom-av1 -crf 30 -b:v 0 -c:a libopus \"%s\"", file, converted);
     int ret = system(cmd);
     if (ret != 0) {
-        fprintf(stderr, "robformat failed, attempting to play original file\n");
+        fprintf(stderr, "ffmpeg failed, attempting to play original file\n");
         converted[0] = '\0';
         return file;
     }
