@@ -1,120 +1,57 @@
 # robscript
 
-This project provides a single media player for a custom video format. The
-player automatically converts other formats as needed and runs on Arch Linux.
+`robscript` is a lightweight C program builder. It allows you to combine
+reusable "blocks" of C code with your own source files to quickly assemble
+applications. Each block lives under the `blocks/` directory and exposes a
+header and source file that you are free to edit.
 
-## Prerequisites
+The tool provided is `robbuilder`. It simply invokes `gcc` with all block
+sources so you can focus on your program logic instead of a complicated build
+system.
 
-- **ffmpeg** with `libaom-av1` and `libopus`
-- **SDL2** development libraries
+## Building robbuilder
 
-Install these packages using your distribution's package manager.
-For example on Arch Linux:
-
-```bash
-sudo pacman -S ffmpeg sdl2
 ```
-
-## Building the player
-
-Inside the `src` directory simply run:
-
-```bash
 cd src
 make
 ```
 
-This produces a single binary:
+This produces the `robbuilder` binary inside the `src` directory.
 
-- `robplayer` – a modular player that automatically converts videos to the `.rob`
-  format before playback
+## Using robbuilder
 
-To play a video with `robplayer`, provide the path on the command line:
+Provide your C source files on the command line.  The helper compiles them
+alongside every block under `../blocks/`.
 
-```bash
-./robplayer path/to/video.rob
 ```
-
-If your path contains spaces or parentheses, wrap it in quotes:
-
-```bash
-./robplayer "path/with/Download(18).mp4"
-```
-
-`robplayer` will convert non-`.rob` files on the fly before playback.
-
-## robplayer architecture
-
-`robplayer` is organized into the following systems. Each component now
-maintains its own small bit of state, paving the way for a fully featured
-player:
-
-1. **logging** – simple stdout logging API
-2. **config** – configuration loader
-3. **network** – placeholder for streaming support
-4. **plugin** – dynamic module hooks
-5. **playlist** – manage multiple files
-6. **formatter** – converts other formats to `.rob`
-7. **decoder** – video/audio decoding using FFmpeg
-8. **audio_output** – audio playback via SDL2
-9. **renderer** – video rendering via SDL2
-10. **controller** – playback state machine
-11. **input** – keyboard event handler
-12. **core** – ties all other systems together
-13. **robplayer main** – application entry point
-
-The sample implementation keeps things lightweight but demonstrates how each
-subsystem can interact.  Logging supports debug levels, the playlist tracks the
-current file, and the controller manages a basic play/pause state.
-
-### MP4 subsystem set
-
-In addition to the core `.rob` systems, the player ships with a collection of
-modules focused on the MP4 container. These components are mostly stubs but
-illustrate how a more involved architecture might look:
-
-1. **mp4_demuxer** – splits MP4 files into tracks
-2. **mp4_muxer** – assembles tracks into a new MP4
-3. **mp4_parser** – reads MP4 boxes and metadata
-4. **mp4_metadata** – handles track tags and chapters
-5. **mp4_stream** – placeholder streaming support
-6. **mp4_index** – builds seek indexes
-7. **mp4_cache** – caches frequently used segments
-8. **mp4_thumbnail** – generates thumbnails from frames
-9. **mp4_chapter** – manages chapter markers
-10. **mp4_subtitle** – handles subtitle tracks
-11. **mp4_encryption** – placeholder for DRM hooks
-12. **mp4_quality** – manages adaptive quality settings
-
-Each MP4 subsystem exposes `*_init()` and `*_shutdown()` functions which the
-core invokes during startup and shutdown.
-
-## Converting videos
-
-If you wish to convert files ahead of time, a helper script is included:
-
-```bash
-./scripts/robconvert.sh input.mp4 output.rob
-```
-
-The script encodes video with AV1 and audio with Opus to reduce file size while
-maintaining quality. The player performs the same conversion automatically when
-given a non-`.rob` file.
-
-## Building programs with `robbuilder`
-
-The project also includes a minimal C build helper named `robbuilder`.  It
-compiles your source files together with the reusable code blocks located in the
-`blocks/` directory.  Each block exposes a header and a C file that you can
-modify or extend.
-
-Example:
-
-```bash
-cd src
-make robbuilder
 ./robbuilder ../examples/hello_main.c -o hello
-../hello
+./hello
 ```
 
-This produces the `hello` binary which calls functions from the included blocks.
+### Adding your own blocks
+
+1. Create `blocks/my_block.c` and `blocks/my_block.h`.
+2. Implement any functions you like in that source file.
+3. Include the header from your program.
+4. Run `robbuilder` with your source file.
+
+All `.c` files inside `blocks/` are automatically compiled.
+
+## Example: simple web server
+
+A small block named `web_block` demonstrates building a tiny HTTP server.
+Compile and run the example with:
+
+```
+./robbuilder ../examples/web_main.c -o web_example
+./web_example
+```
+
+Then visit <http://localhost:8080> in your browser to see a greeting generated
+entirely from C code blocks.
+
+## Included blocks
+
+- `hello_block` – prints a greeting
+- `math_block` – a minimal math helper
+- `web_block` – serves a single HTTP response on port 8080
