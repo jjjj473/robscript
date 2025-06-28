@@ -9,6 +9,11 @@ player automatically converts other formats as needed and runs on Arch Linux.
 - **SDL2** development libraries
 
 Install these packages using your distribution's package manager.
+For example on Arch Linux:
+
+```bash
+sudo pacman -S ffmpeg sdl2
+```
 
 ## Building the player
 
@@ -83,3 +88,15 @@ illustrate how a more involved architecture might look:
 
 Each MP4 subsystem exposes `*_init()` and `*_shutdown()` functions which the
 core invokes during startup and shutdown.
+
+## Converting videos
+
+If you wish to convert files ahead of time, a helper script is included:
+
+```bash
+./scripts/robconvert.sh input.mp4 output.rob
+```
+
+The script encodes video with AV1 and audio with Opus to reduce file size while
+maintaining quality. The player performs the same conversion automatically when
+given a non-`.rob` file.
