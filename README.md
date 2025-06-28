@@ -1,35 +1,54 @@
 # robscript
 
-This repository provides an example script to convert videos to an AV1-based format. AV1 often achieves smaller file sizes than H.264 in MP4 containers while maintaining similar visual quality.
+This project provides tools for working with a custom video format. It includes
+conversion utilities and a modular media player for Arch Linux.
 
 ## Prerequisites
 
-- **ffmpeg** built with `libaom-av1` and `libopus` support.
+- **ffmpeg** with `libaom-av1` and `libopus`
+- **SDL2** development libraries
 
-Install ffmpeg using your distribution's package manager or build it from source with these libraries enabled.
+Install these packages using your distribution's package manager.
 
-## Usage
+## Video conversion
 
+Use the helper script to convert videos to an AV1+Opus Matroska file:
+
+```bash
+./build_video.sh input.mp4 output.rob
 ```
-./build_video.sh input_video output.mkv
-```
 
-The script encodes the input video to the AV1 codec (video) and Opus (audio) in an MKV container. Adjust the `-crf` value to trade off quality for file size (lower is higher quality).
+## Building the C tools
 
-The resulting file should offer smaller size than a comparable MP4 encoded with H.264 while remaining compatible with players like VLC or mpv on any Linux system.
-
-## Building C tools
-
-The `src` directory contains two small programs:
-
-- **robformat** – converts any input video to a simple Matroska container encoded with the same codecs. It's primarily a format wrapper to create `.rob` files.
-- **robplay** – a basic video player using FFmpeg and SDL2 to display `.rob` videos.
-
-To build them, install the FFmpeg and SDL2 development packages and run:
+Inside the `src` directory you will find a converter and two players. Run:
 
 ```bash
 cd src
 make
 ```
 
-This will create the `robformat` and `robplay` binaries inside `src/`.
+This produces three binaries:
+
+- `robformat` – wraps any video into a `.rob` container
+- `robplay` – minimal SDL2 player for `.rob` files
+- `robplayer` – experimental modular player built around twelve systems
+
+## robplayer architecture
+
+`robplayer` is organized into the following systems:
+
+1. **logging** – simple stdout logging API
+2. **config** – configuration loader
+3. **network** – placeholder for streaming support
+4. **plugin** – dynamic module hooks
+5. **playlist** – manage multiple files
+6. **decoder** – video/audio decoding using FFmpeg
+7. **audio_output** – audio playback via SDL2
+8. **renderer** – video rendering via SDL2
+9. **controller** – playback state machine
+10. **input** – keyboard event handler
+11. **core** – ties all other systems together
+12. **robplayer main** – application entry point
+
+Currently each system only prints initialization and shutdown messages, but the
+structure allows further expansion for a full-featured media player.
