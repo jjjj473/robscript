@@ -61,3 +61,25 @@ player:
 The sample implementation keeps things lightweight but demonstrates how each
 subsystem can interact.  Logging supports debug levels, the playlist tracks the
 current file, and the controller manages a basic play/pause state.
+
+### MP4 subsystem set
+
+In addition to the core `.rob` systems, the player ships with a collection of
+modules focused on the MP4 container. These components are mostly stubs but
+illustrate how a more involved architecture might look:
+
+1. **mp4_demuxer** – splits MP4 files into tracks
+2. **mp4_muxer** – assembles tracks into a new MP4
+3. **mp4_parser** – reads MP4 boxes and metadata
+4. **mp4_metadata** – handles track tags and chapters
+5. **mp4_stream** – placeholder streaming support
+6. **mp4_index** – builds seek indexes
+7. **mp4_cache** – caches frequently used segments
+8. **mp4_thumbnail** – generates thumbnails from frames
+9. **mp4_chapter** – manages chapter markers
+10. **mp4_subtitle** – handles subtitle tracks
+11. **mp4_encryption** – placeholder for DRM hooks
+12. **mp4_quality** – manages adaptive quality settings
+
+Each MP4 subsystem exposes `*_init()` and `*_shutdown()` functions which the
+core invokes during startup and shutdown.
