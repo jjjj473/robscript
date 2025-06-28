@@ -2,7 +2,7 @@ CC?=gcc
 CFLAGS := $(shell pkg-config --cflags libavformat libavcodec libavutil libswscale sdl2)
 LDFLAGS := $(shell pkg-config --libs libavformat libavcodec libavutil libswscale sdl2)
 
-all: robplayer
+all: robplayer robbuilder
 
 # standalone converter and simple player removed
 
@@ -22,4 +22,7 @@ robplayer: $(PLAYER_OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o robplayer player/*.o
+	rm -f *.o robplayer robbuilder player/*.o
+
+robbuilder: robbuilder.o
+	$(CC) -o $@ robbuilder.o

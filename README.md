@@ -100,3 +100,21 @@ If you wish to convert files ahead of time, a helper script is included:
 The script encodes video with AV1 and audio with Opus to reduce file size while
 maintaining quality. The player performs the same conversion automatically when
 given a non-`.rob` file.
+
+## Building programs with `robbuilder`
+
+The project also includes a minimal C build helper named `robbuilder`.  It
+compiles your source files together with the reusable code blocks located in the
+`blocks/` directory.  Each block exposes a header and a C file that you can
+modify or extend.
+
+Example:
+
+```bash
+cd src
+make robbuilder
+./robbuilder ../examples/hello_main.c -o hello
+../hello
+```
+
+This produces the `hello` binary which calls functions from the included blocks.
