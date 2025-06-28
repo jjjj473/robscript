@@ -31,13 +31,22 @@ This produces three binaries:
 
 - `robformat` – wraps any video into a `.rob` container
 - `robplay` – minimal SDL2 player for `.rob` files
-- `robplayer` – experimental modular player built around twelve systems
+- `robplayer` – experimental modular player that can auto-convert files
+  using `robformat`
 
 To play a video with `robplayer`, provide the path on the command line:
 
 ```bash
 ./robplayer path/to/video.rob
 ```
+
+If your path contains spaces or parentheses, wrap it in quotes:
+
+```bash
+./robplayer "path/with/Download(18).mp4"
+```
+
+`robplayer` will convert non-`.rob` files on the fly before playback.
 
 ## robplayer architecture
 
@@ -50,13 +59,14 @@ player:
 3. **network** – placeholder for streaming support
 4. **plugin** – dynamic module hooks
 5. **playlist** – manage multiple files
-6. **decoder** – video/audio decoding using FFmpeg
-7. **audio_output** – audio playback via SDL2
-8. **renderer** – video rendering via SDL2
-9. **controller** – playback state machine
-10. **input** – keyboard event handler
-11. **core** – ties all other systems together
-12. **robplayer main** – application entry point
+6. **formatter** – converts other formats to `.rob`
+7. **decoder** – video/audio decoding using FFmpeg
+8. **audio_output** – audio playback via SDL2
+9. **renderer** – video rendering via SDL2
+10. **controller** – playback state machine
+11. **input** – keyboard event handler
+12. **core** – ties all other systems together
+13. **robplayer main** – application entry point
 
 The sample implementation keeps things lightweight but demonstrates how each
 subsystem can interact.  Logging supports debug levels, the playlist tracks the

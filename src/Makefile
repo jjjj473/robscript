@@ -11,8 +11,8 @@ robplay: robplay.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 PLAYER_OBJS := player/core.o player/logging.o player/config.o player/network.o player/plugin.o \
-player/playlist.o player/controller.o player/decoder.o player/audio_output.o \
-player/renderer.o player/input.o player/robplayer.o
+player/playlist.o player/formatter.o player/controller.o player/decoder.o \
+player/audio_output.o player/renderer.o player/input.o player/robplayer.o
 
 robplayer: $(PLAYER_OBJS)
 	$(CC) -o $@ $(PLAYER_OBJS) $(LDFLAGS)

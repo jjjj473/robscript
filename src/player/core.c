@@ -3,6 +3,7 @@
 #include "logging.h"
 #include "config.h"
 #include "network.h"
+#include "formatter.h"
 #include "plugin.h"
 #include "playlist.h"
 #include "controller.h"
@@ -17,6 +18,7 @@ int core_init(const char *file) {
     network_init();
     plugin_init();
     playlist_init();
+    formatter_init();
     decoder_init();
 
     const config_t *cfg = config_get();
@@ -26,8 +28,9 @@ int core_init(const char *file) {
     input_init();
 
     if (file) {
-        playlist_add(file);
-        decoder_open(file);
+        const char *play_file = formatter_autoconvert(file);
+        playlist_add(play_file);
+        decoder_open(play_file);
     }
 
     controller_play();
@@ -41,6 +44,7 @@ void core_shutdown(void) {
     renderer_shutdown();
     audio_output_shutdown();
     decoder_shutdown();
+    formatter_shutdown();
     playlist_shutdown();
     plugin_shutdown();
     network_shutdown();
