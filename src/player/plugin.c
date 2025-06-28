@@ -8,3 +8,8 @@ void plugin_init(void) {
 void plugin_shutdown(void) {
     printf("Plugin system shutdown\n");
 }
+
+int plugin_load(const char *path) {
+    printf("Loading plugin: %s\n", path);
+    return 0;
+}

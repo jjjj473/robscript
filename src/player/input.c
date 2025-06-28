@@ -8,3 +8,7 @@ void input_init(void) {
 void input_shutdown(void) {
     printf("Input system shutdown\n");
 }
+
+void input_process(void) {
+    printf("Processing user input\n");
+}

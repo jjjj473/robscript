@@ -33,9 +33,17 @@ This produces three binaries:
 - `robplay` – minimal SDL2 player for `.rob` files
 - `robplayer` – experimental modular player built around twelve systems
 
+To play a video with `robplayer`, provide the path on the command line:
+
+```bash
+./robplayer path/to/video.rob
+```
+
 ## robplayer architecture
 
-`robplayer` is organized into the following systems:
+`robplayer` is organized into the following systems. Each component now
+maintains its own small bit of state, paving the way for a fully featured
+player:
 
 1. **logging** – simple stdout logging API
 2. **config** – configuration loader
@@ -50,5 +58,6 @@ This produces three binaries:
 11. **core** – ties all other systems together
 12. **robplayer main** – application entry point
 
-Currently each system only prints initialization and shutdown messages, but the
-structure allows further expansion for a full-featured media player.
+The sample implementation keeps things lightweight but demonstrates how each
+subsystem can interact.  Logging supports debug levels, the playlist tracks the
+current file, and the controller manages a basic play/pause state.

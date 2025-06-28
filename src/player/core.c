@@ -11,18 +11,26 @@
 #include "renderer.h"
 #include "input.h"
 
-int core_init(int argc, char **argv) {
-    (void)argc; (void)argv;
+int core_init(const char *file) {
     logging_init();
     config_init();
     network_init();
     plugin_init();
     playlist_init();
     decoder_init();
-    audio_output_init();
-    renderer_init();
+
+    const config_t *cfg = config_get();
+    audio_output_init(cfg->volume);
+    renderer_init(640, 480);
     controller_init();
     input_init();
+
+    if (file) {
+        playlist_add(file);
+        decoder_open(file);
+    }
+
+    controller_play();
     printf("Core initialized with all systems\n");
     return 0;
 }

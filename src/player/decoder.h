@@ -3,5 +3,6 @@
 
 void decoder_init(void);
 void decoder_shutdown(void);
+int decoder_open(const char *file);
 
 #endif /* DECODER_H */
